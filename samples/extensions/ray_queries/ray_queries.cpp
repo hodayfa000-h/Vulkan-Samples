@@ -74,10 +74,11 @@ RayQueries::RayQueries()
 	add_device_extension(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME);
 
 	// Required for ray queries
-	add_device_extension(VK_KHR_SPIRV_1_4_EXTENSION_NAME);
+	// add_device_extension(VK_KHR_SPIRV_1_4_EXTENSION_NAME);
 
 	// Required by VK_KHR_spirv_1_4
-	add_device_extension(VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME);
+	// add_device_extension(VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME);
+	// these are unnecessary if Vulkan 1.2+ , this fixes crash on adreno proprietary driver
 }
 
 RayQueries::~RayQueries()
