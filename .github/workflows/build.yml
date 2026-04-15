@@ -146,6 +146,7 @@ jobs:
           java-version: "21"
           distribution: "zulu"
           cache: gradle
+
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2.9
         with:
@@ -158,6 +159,11 @@ jobs:
         working-directory: build/android_gradle
         run: NDK_CCACHE=1 NDK_CCACHE_BIN=ccache ./gradlew app:assemble${{ matrix.build_type }} --info
 
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: vulkan-samples-apk
+          path: build/android_gradle/app/build/outputs/apk/debug/*.apk
   build_ios:
     # iOS is 10x expensive to run on GitHub machines, so only run if we know something else fast/simple passed as well
     needs: build
