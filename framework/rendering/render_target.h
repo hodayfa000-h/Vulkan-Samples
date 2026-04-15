@@ -25,6 +25,13 @@
 #include "core/hpp_image.h"
 #include "core/hpp_image_view.h"
 #include "core/image.h"
+struct Extent2DCompare {
+    bool operator()(const vk::Extent2D& a, const vk::Extent2D& b) const {
+        if (a.width != b.width) return a.width < b.width;
+        return a.height < b.height;
+    }
+};
+
 
 namespace vkb
 {
@@ -239,7 +246,7 @@ inline void RenderTarget<bindingType>::init(std::vector<vkb::core::HPPImage> &&i
 	auto get_image_extent = [](const vkb::core::HPPImage &image) { return vk::Extent2D{image.get_extent().width, image.get_extent().height}; };
 
 	// Constructs a set of unique image extents given a vector of images
-	std::set<vk::Extent2D> unique_extent;
+	std::set<vk::Extent2D, Extent2DCompare> unique_extent;
 	std::ranges::transform(images, std::inserter(unique_extent, unique_extent.end()), get_image_extent);
 
 	// Allow only one extent size for a render target
@@ -293,7 +300,7 @@ inline void RenderTarget<bindingType>::init(std::vector<vkb::core::HPPImageView>
 
 	// Constructs a set of unique image extents given a vector of image views;
 	// allow only one extent size for a render target
-	std::set<vk::Extent2D> unique_extent;
+	std::set<vk::Extent2D, Extent2DCompare> unique_extent;
 	std::ranges::transform(views, std::inserter(unique_extent, unique_extent.end()), get_view_extent);
 	if (unique_extent.size() != 1)
 	{
